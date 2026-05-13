@@ -1,0 +1,9 @@
+{
+  "name": "daka",
+  "version": "1.0.0",
+  "description": "打卡提醒系统 - 微信推送通知（零外部依赖）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="每日打卡提醒系统 - GitHub Actions 自动推送微信提醒">
+  <title>每日打卡</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📋 每日打卡</h1>
+      <p>坚持打卡，养成好习惯 · GitHub Actions 自动提醒</p>
+    </header>
+
+    <div id="message" class="message"></div>
+
+    <div class="card">
+      <div class="card-title">
+        ⏰ 今日提醒时段
+      </div>
+      <div id="slotGrid" class="slot-grid"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        📊 本周打卡
+        <span class="badge" id="weekStreak">连续 0 天</span>
+      </div>
+      <div id="recordsList" class="records-list"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        🔧 设置指南
+      </div>
+      <div style="font-size:14px;color:#555;line-height:1.8;">
+        <p style="margin-bottom:12px;font-weight:600;">📱 想每天在微信收到打卡提醒？</p>
+        <ol style="padding-left:20px;">
+          <li>访问 <a href="https://sct.ftqq.com" target="_blank" style="color:#667eea;">sct.ftqq.com</a> 扫码登录，获取 SendKey</li>
+          <li>Fork 此仓库到你的 GitHub</li>
+          <li>在仓库 Settings → Secrets and variables → Actions → 添加 <code style="background:#f0f0f0;padding:1px 6px;border-radius:4px;font-size:13px;">SENDKEY</code></li>
+          <li>在 Actions 中启用 Workflow</li>
+          <li>每天 6:05、9:30、18:05、21:20 自动发微信提醒 🎉</li>
+        </ol>
+        <p style="margin-top:12px;padding:12px;background:#f8f8ff;border-radius:8px;font-size:13px;">
+          ✅ 提醒完全自动运行，无需开电脑、无需部署服务器！
+        </p>
+      </div>
+    </div>
+
+    <div class="card" id="checkinSection">
+      <div class="card-title">
+        ✋ 手动打卡
+        <span class="badge">本地记录</span>
+      </div>
+      <p style="font-size:13px;color:#888;margin-bottom:12px;">点击下方按钮记录你的打卡情况（数据保存在此浏览器中）</p>
+      <div id="manualSlots" class="slot-grid"></div>
+    </div>
+
+    <div class="footer">
+      提醒时间：🌅 6:05 · ☀️ 9:30 · 🌆 18:05 · 🌙 21:20<br>
+      由 GitHub Actions 免费驱动 · <a href="https://sct.ftqq.com" target="_blank">Server酱</a> 推送微信
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

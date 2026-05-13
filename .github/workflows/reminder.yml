@@ -1,0 +1,26 @@
+name: 打卡提醒
+
+on:
+  schedule:
+    - cron: '5 22 * * *'
+    - cron: '30 1 * * *'
+    - cron: '5 10 * * *'
+    - cron: '20 13 * * *'
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: '手动指定提醒时段 (留空则自动判断)'
+        required: false
+        default: ''
+
+jobs:
+  send-reminder:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 发送微信提醒
+        env:
+          SENDKEY: ${{ secrets.SENDKEY }}
+          SLOT: ${{ github.event.inputs.slot || '' }}
+        run: node scripts/send-reminder.js
