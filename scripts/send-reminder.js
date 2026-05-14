@@ -27,13 +27,24 @@ function detectSlot() {
   const h = now.getHours();
   const m = now.getMinutes();
 
+  let closestSlot = null;
+  let minDiff = Infinity;
+  
   for (const st of SLOT_TIMES) {
-    const diff = Math.abs((h * 60 + m) - (st.hour * 60 + st.min));
-    if (diff <= 3) return st;
+    const targetMinutes = st.hour * 60 + st.min;
+    const currentMinutes = h * 60 + m;
+    let diff = Math.abs(currentMinutes - targetMinutes);
+    
+    if (diff < minDiff) {
+      minDiff = diff;
+      closestSlot = st;
+    }
   }
 
-  console.log(`当前北京时间: ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}，不在提醒时段内`);
-  return null;
+  console.log(`当前北京时间: ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
+  console.log(`📅 最近的提醒时段: ${closestSlot.label} (差值: ${minDiff}分钟)`);
+  
+  return closestSlot;
 }
 
 function buildContent(slotInfo) {
