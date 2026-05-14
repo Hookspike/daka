@@ -72,7 +72,7 @@ function sendNotification(sendkey, title, content) {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(postData)
       },
-      timeout: 15000
+      timeout: 30000
     };
 
     const req = https.request(options, (res) => {
@@ -99,6 +99,22 @@ function sendNotification(sendkey, title, content) {
   });
 }
 
+async function sendWithRetry(sendkey, title, content, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const result = await sendNotification(sendkey, title, content);
+      return result;
+    } catch (err) {
+      console.log(`⚠️ 第 ${i + 1} 次尝试失败: ${err.message}`);
+      if (i < maxRetries - 1) {
+        await new Promise(resolve => setTimeout(resolve, 2000 * (i + 1)));
+      } else {
+        throw err;
+      }
+    }
+  }
+}
+
 async function main() {
   if (!SENDKEY) {
     console.error('❌ 错误: 未设置 SENDKEY');
@@ -119,7 +135,7 @@ async function main() {
   const content = buildContent(slotInfo);
 
   try {
-    const result = await sendNotification(SENDKEY, slotInfo.title, content);
+    const result = await sendWithRetry(SENDKEY, slotInfo.title, content);
     console.log(`✅ 微信提醒发送成功! dataId=${result.data || 'N/A'}`);
   } catch (err) {
     console.error(`❌ 发送失败: ${err.message}`);
