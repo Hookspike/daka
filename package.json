@@ -1,9 +1,12 @@
 {
   "name": "daka",
   "version": "1.0.0",
-  "description": "打卡提醒系统 - 微信推送通知（零外部依赖）",
-  "main": "server.js",
+  "description": "打卡提醒系统 - 微信推送通知",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node scripts/send-reminder.js"
   }
 }
