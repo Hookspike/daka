@@ -63,7 +63,7 @@ function buildContent(slotInfo) {
 
 function sendNotification(sendkey, title, content) {
   return new Promise((resolve, reject) => {
-    const postData = JSON.stringify({ title, content });
+    const postData = JSON.stringify({ title, desp: content });
     const options = {
       hostname: 'sct.ftqq.com',
       path: `/${sendkey}.send`,
