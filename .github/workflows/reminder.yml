@@ -1,31 +1,41 @@
-name: 打卡提醒
+name: Daily Wechat Reminders
 
 on:
   schedule:
-    - cron: '5 22 * * *'
-    - cron: '30 1 * * *'
-    - cron: '5 10 * * *'
-    - cron: '20 13 * * *'
-  workflow_dispatch:
-    inputs:
-      slot:
-        description: '手动指定提醒时段 (留空则自动判断)'
-        required: false
-        default: ''
+    # UTC时间, 比北京时间少8小时
+    - cron: '5 22 * * *'   # 06:05 北京时间
+    - cron: '30 1 * * *'   # 09:30 北京时间
+    - cron: '5 10 * * *'   # 18:05 北京时间
+    - cron: '20 13 * * *'  # 21:20 北京时间
 
 jobs:
   send-reminder:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: 设置 Node.js 环境
-        uses: actions/setup-node@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        
+      - name: Set reminder title and content
+        run: |
+          echo "REMIND_TITLE=打卡提醒" >> $GITHUB_ENV
+          case ${{ github.event.schedule }} in
+            "5 22 * * *") echo "REMIND_DESP=早安，记得6:05打卡！" >> $GITHUB_ENV;;
+            "30 1 * * *") echo "REMIND_DESP=上午好，记得9:30打卡！" >> $GITHUB_ENV;;
+            "5 10 * * *") echo "REMIND_DESP=下午好，记得18:05打卡！" >> $GITHUB_ENV;;
+            "20 13 * * *") echo "REMIND_DESP=晚上好，记得21:20打卡！" >> $GITHUB_ENV;;
+          esac
+          
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          node-version: '18'
-
-      - name: 发送微信提醒
+          python-version: '3.11'
+          
+      - name: Install requests
+        run: pip install requests
+          
+      - name: Send Wechat Reminder
         env:
-          SENDKEY: ${{ secrets.SENDKEY }}
-          SLOT: ${{ github.event.inputs.slot || '' }}
-        run: node scripts/send-reminder.js
+          SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
+          REMIND_TITLE: ${{ env.REMIND_TITLE }}
+          REMIND_DESP: ${{ env.REMIND_DESP }}
+        run: python wechat_reminder.py
