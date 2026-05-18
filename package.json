@@ -1,0 +1,13 @@
+{
+  "name": "daka",
+  "version": "1.0.0",
+  "description": "在线打卡系统 - 支持早晚两次打卡与微信提醒",
+  "scripts": {
+    "install:all": "cd server && npm install && cd ../client && npm install",
+    "dev": "cd server && npm start & cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start"
+  },
+  "keywords": ["打卡", "checkin", "wechat", "reminder"],
+  "license": "MIT"
+}
